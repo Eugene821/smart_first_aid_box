@@ -1,11 +1,13 @@
 import tkinter as tk
 import cv2
-from ultralytics import YOLO
 from PIL import Image, ImageTk
+# YOLOv5 모델을 사용하기 위한 정확한 임포트 구문을 확인해야 합니다.
+from yolov5 import YOLO
 
 CONFIDENCE_THRESHOLD = 0.4
 
-model = YOLO('best_h2.pt')
+# 모델 경로를 올바르게 지정합니다.
+model = YOLO('model/best_h2.pt')
 class_names = ['bites', 'burns', 'cuts']
 
 cap = cv2.VideoCapture(0)
@@ -19,6 +21,23 @@ box_colors = {
 }
 
 paused = True
+
+# 함수와 클래스 정의는 이전과 동일하게 유지됩니다...
+
+window = tk.Tk()
+window.title("Injury Detection Application")
+
+# 경로에 있는 백슬래시를 슬래시로 변경합니다.
+bin = tk.PhotoImage(file="data/hurtlogo4.png")
+bin_label = tk.Label(window, image=bin)
+bin_label.grid(row=0, column=2, padx=10, pady=10, rowspan=4)
+
+panel = tk.Label(window)
+panel.grid(row=0, column=2, padx=10, pady=10, rowspan=4)
+
+logo = tk.PhotoImage(file="data/hurtlogo2.png")
+logo_label = tk.Label(window, image=logo)
+logo_label.grid(row=0, column=0, columnspan=2)
 
 def toggle_pause():
     global paused
@@ -84,14 +103,14 @@ def detect_objects(panel):
 window = tk.Tk()
 window.title("Injury Detection Application")
 
-bin = tk.PhotoImage(file="hurtlogo4.png")
+bin = tk.PhotoImage(file="data/hurtlogo4.png")
 bin_label = tk.Label(window, image=bin)
 bin_label.grid(row=0, column=2, padx=10, pady=10,  rowspan=4)
 
 panel = tk.Label(window)
 panel.grid(row=0, column=2, padx=10, pady=10,  rowspan=4)
 
-logo = tk.PhotoImage(file="hurtlogo2.png")
+logo = tk.PhotoImage(file="data/hurtlogo2.png")
 logo_label = tk.Label(window, image=logo)
 logo_label.grid(row=0, column=0, columnspan=2)
 
