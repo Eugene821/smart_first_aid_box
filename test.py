@@ -1,12 +1,12 @@
 import cv2
 import requests
-import torch
+#import torch
 import numpy as np
 from PIL import Image
 from io import BytesIO
 
-from ultralytics import YOLO
-from roboflow import Roboflow
+#from ultralytics import YOLO
+#from roboflow import Roboflow
 
 
 # Roboflow API 설정
