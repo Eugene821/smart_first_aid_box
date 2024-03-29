@@ -1,3 +1,8 @@
+'''
+Microphone Client : 음성인식 기술 처리
+작성일 : 2024.03.30
+작성자 : 전자파(팀)
+'''
 import speech_recognition as sr
 import socket
 import threading
@@ -8,11 +13,11 @@ import pygame
 
 pygame.init()
 
-HOST = "10.10.14.69"
+HOST = "10.10.14.70"
 PORT = 5000
 ADDR = (HOST,PORT)
 
-recvId = "MIC_PYT"
+recvId = "MIC"
 recvFlag = False
 rsplit = []
 lock=threading.Lock()
@@ -54,7 +59,7 @@ sound_to_words_mapping = {
 try:
 	s.connect((HOST, PORT)) 
 	def sendingMsg(): 
-		s.send('[MIC_PYT:PASSWD]'.encode()) 
+		s.send('[MIC:PASSWD]'.encode()) 
 		time.sleep(0.5)
 		while True: 
 			data = input() 
@@ -80,8 +85,6 @@ print('connect is success')
 ledFlag = False
 
 
-
-
 def find_sound_path(text):
     for sound_path, keywords in sound_to_words_mapping.items():
         if any(keyword in text for keyword in keywords):
@@ -97,14 +100,23 @@ def process_speech_input():
 
         while True:
             try:
-                print("듣고 있습니다...")
+                print("듣고 있습니다...\n")
                 audio_data = recognizer.listen(source, timeout=10, phrase_time_limit=5)
                 text = recognizer.recognize_google(audio_data, language='ko-KR')
                 print(f"인식된 명령: {text}")
+  
+                # 특정 키워드에 따른 명령 전송
+                if "열어" in text :
+                    s.send(b'[BT]SERVO@ON\n')  # LED 켜는 명령 전송
+                    print("문이 열렸습니다.\n")
+                elif "닫아" in text:
+                    s.send(b'[BT]SERVO@OFF\n')  # LED 끄는 명령 전송
+                    print("문이 닫혔습니다.\n")
+
 
                 if "아파" in text:
                     sound_manager.play_sound(intro_sound_path)
-                    print("추가 명령을 말하세요.")
+                    print("추가 명령을 말하세요.\n")
 
                     # 추가 명령에 대한 음성 입력 기다림
                     audio_data = recognizer.listen(source, timeout=10, phrase_time_limit=5)
@@ -113,26 +125,36 @@ def process_speech_input():
 
                     # 추가 명령에 따라 사운드 재생 및 명령 전송
                     sound_path = find_sound_path(text)
+
                     if sound_path:
                         sound_manager.play_sound(sound_path)
                         print(f"재생: {sound_path}")
 
                         # 특정 키워드에 따른 명령 전송
                         if any(keyword in text for keyword in ['두통', '머리', '열', '어지러워', '어지럼증']):
-                            s.send(b'[LYJ_ARD]LED@ON\n')  # LED 켜는 명령 전송
-                            print("LED 켜는 명령을 전송했습니다.")
-                        elif "꺼" in text:
-                            s.send(b'[LYJ_ARD]LED@OFF\n')  # LED 끄는 명령 전송
-                            print("LED 끄는 명령을 전송했습니다.")
+                            s.send(b'[BT]MOTOR3@ON\n')
+                            print("motor3 work\n")
+                        elif any(keyword in text for keyword in ['데었', '화상', '뜨거워', '뜨겁']):
+                            s.send(b'[BT]MOTOR1@ON\n') 
+                            s.send(b'[BT]MOTOR2@ON\n') 
+                            print("motor1 work\nmotor2 work\n")
+                        elif any(keyword in text for keyword in ['물렸', '가렵', '모기']):
+                            s.send(b'[BT]SERVO@ON\n')
+                            print("servo work\n")
+                        elif any(keyword in text for keyword in ['출혈', '피', '베었', '찔렸']):
+                            s.send(b'[BT]MOTOR1@ON\n') 
+                            print("motor1 work\n")
 
                     else:
                         sound_manager.play_sound(retry_sound_path)
-                        print("알아듣지 못했습니다. 다시 말해주세요.")
+                        print("알아듣지 못했습니다. 다시 말해주세요.\n")
+
+                    
 
             except sr.UnknownValueError:
-                print("불분명한 음성입니다. 다시 말해주세요.")
+                print("불분명한 음성입니다. 다시 말해주세요.\n")
             except sr.WaitTimeoutError:
-                print("시간 초과입니다. 다시 시도해주세요.")
+                print("시간 초과입니다. 다시 시도해주세요.\n")
             except sr.RequestError as e:
                 print(f"음성 인식 서비스 요청 중 문제 발생: {e}")
 

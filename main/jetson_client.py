@@ -1,3 +1,8 @@
+'''
+Jetson Nano Client : 젯슨나노 영상처리
+작성일 : 2024.03.30
+작성자 : 전자파(팀)
+'''
 import cv2
 import tkinter as tk
 import socket
@@ -10,12 +15,11 @@ from tkinter import messagebox
 from ultralytics import YOLO
 from PIL import Image, ImageTk
 
-
-HOST = "10.10.14.69"
+HOST = "10.10.14.70"
 PORT = 5000
 ADDR = (HOST,PORT)
 CONFIDENCE_THRESHOLD = 0.4
-recvId = "10"
+recvId = "JETSON"
 recvFlag = False
 rsplit = []
 lock=threading.Lock()
@@ -24,11 +28,11 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
 	s.connect((HOST, PORT)) 
 	def sendingMsg(): 
-		s.send('[LYJ_PYT:PASSWD]'.encode()) 
+		s.send('[JETSON:PASSWD]'.encode()) 
 		time.sleep(0.5)
 		while True: 
 			data = input() 
-	#			data = bytes(data, "utf-8") 
+	#		data = bytes(data, "utf-8") 
 			data = bytes(data+'\n', "utf-8") 
 			s.send(data) 
 			s.close() 
@@ -52,7 +56,7 @@ print('connect is success')
 ledFlag = False
 
 #모델 로드
-model = YOLO('model/best_h3.pt')
+model = YOLO('best_h3.pt')
 class_names = ['bites', 'burns', 'cuts']
 
 # 웹캠 설정
@@ -72,11 +76,6 @@ box_colors = {
 
 paused = True
 
-#GUI 설정
-window = tk.Tk()
-window.title("Injury Detection Application")
-
-
 def toggle_pause():
     global paused
     paused = not paused
@@ -86,20 +85,6 @@ def toggle_pause():
         Pause_button_text.set("Pause")
         detect_objects(panel)
 
-def led_func() :
-    ledFlag = False
-    while True: 
-        if recvFlag:
-            print('recv :',rsplit) 
-            recvFlag = False
-        time.sleep(2)
-        if ledFlag:
-            data = "[LYJ_ARD]LED@ON"
-        else:
-            data = "[LYJ_ARD]LED@OFF"
-        data = bytes(data+'\n', "utf-8") 
-        s.send(data) 
-        ledFlag = ~ledFlag
 
 def show_info():
     ret, frame = cap.read()
@@ -122,33 +107,31 @@ def show_info():
             info_label.config(text="Class Currently Recognized: " + ', '.join(class_detected))
             if class_name == 'bites':
                 info_label.config(text="벌레 약 출력")
-                #sendBuf="[recvId]LED@ON"
-                data = "[LYJ_ARD]LED@ON"
+                data = "[BT]SERVO@ON"
                 data = bytes(data+'\n', "utf-8") 
                 s.send(data)
+            
             elif class_name == 'burns':
                 info_label.config(text="화상 연고 및 메디폼 출력")
-                #sendBuf="[recvId]LED@ON"
-                data = "[LYJ_ARD]LED@ON"
+                data = "[BT]MOTOR1@ON"
                 data = bytes(data+'\n', "utf-8") 
                 s.send(data)
+                data = "[BT]MOTOR2@ON"
+                data = bytes(data+'\n', "utf-8") 
+                s.send(data)
+            
             elif class_name == 'cuts':
                 info_label.config(text="상처 연고 및 일반 밴드 출력")
-                #sendBuf="[recvId]LED@ON"
-                data = "[LYJ_ARD]LED@OFF"
-                data = bytes(data+'\n', "utf-8")
+                data = "[BT]MOTOR1@ON"
+                data = bytes(data+'\n', "utf-8") 
                 s.send(data)
+            
             else:
                 info_label.config(text="재감지 필요")
-                #sendBuf="[recvId]LED@OFF"
-                data = "[LYJ_ARD]LED@OFF"
-                data = bytes(data+'\n', "utf-8")
-                s.send(data)
+            
         else:
             info_label.config(text="No classes detected")
-            data = "[LYJ_ARD]LED@OFF"
-            data = bytes(data+'\n', "utf-8")
-            s.send(data)
+
 
 def detect_objects(panel):
     ret, frame = cap.read()
@@ -181,39 +164,38 @@ def send_command(command_str):
     """서버에 명령을 전송합니다. 문자열을 인코딩하여 바이트로 변환합니다."""
     command_bytes = command_str.encode()  # 문자열을 바이트로 인코딩
     s.send(command_bytes)
+    
+#GUI 설정
+window = tk.Tk()
+window.title("Injury Detection Application")
 
-
-
-bin = tk.PhotoImage(file="data/hurtlogo4.png")
+bin = tk.PhotoImage(file="hurtlogo3.png")
 bin_label = tk.Label(window, image=bin)
-bin_label.grid(row=0, column=2, padx=10, pady=10,  rowspan=4)
+bin_label.grid(row=0, column=2, padx=10, pady=10,  rowspan=6)
 
 panel = tk.Label(window)
-panel.grid(row=0, column=2, padx=10, pady=10,  rowspan=4)
+panel.grid(row=0, column=2, padx=10, pady=10,  rowspan=6)
 
-logo = tk.PhotoImage(file="data/hurtlogo2.png")
+logo = tk.PhotoImage(file="hurtlogo1.png")
 logo_label = tk.Label(window, image=logo)
 logo_label.grid(row=0, column=0, columnspan=2)
 
-title_label = tk.Label(window, text="Please recognize the injury on camera", font=("Helvetica", 20))
-title_label.grid(row=1, column=0, columnspan=2, pady=3)
+title_label = tk.Label(window, text="Please recognize the injury on camera", font=("Helvetica", 12))
+title_label.grid(row=1, column=0, columnspan=2, pady=1)
 
 Pause_button_text = tk.StringVar()
 Pause_button_text.set("Resume")
-Pause_button = tk.Button(window, textvariable=Pause_button_text, command=toggle_pause, width=15, height=3, font=("Helvetica", 15))
-Pause_button.grid(row=2, column=0, padx=5, pady=3)
+Pause_button = tk.Button(window, textvariable=Pause_button_text, command=toggle_pause, width=10, height=2, font=("Helvetica", 15))
+Pause_button.grid(row=2, column=0, padx=3, pady=1)
 
-exit_button = tk.Button(window, text="Exit", command=window.quit, width=15, height=3, font=("Helvetica", 15))
-exit_button.grid(row=2, column=1, padx=5, pady=3)
+exit_button = tk.Button(window, text="Exit", command=window.quit, width=10, height=2, font=("Helvetica", 15))
+exit_button.grid(row=2, column=1, padx=3, pady=1)
 
-info_button = tk.Button(window, text="Info", command=show_info, width=15, height=3, font=("Helvetica", 15))
-info_button.grid(row=3, column=0, padx=5, pady=3)
+info_button = tk.Button(window, text="Info", command=show_info, width=24, height=2, font=("Helvetica", 15))
+info_button.grid(row=3, column=0, columnspan=2, padx=3, pady=1,)
 
 info_label = tk.Label(window, text="", font=("Helvetica", 12))
-info_label.grid(row=3, column=1, padx=5, pady=3)
-
-#exit_button2 = tk.Button(window, text="Exit2", command=window.quit, width=15, height=3, font=("Helvetica", 15))
-#exit_button2.grid(row=3, column=1, padx=5, pady=3)
+info_label.grid(row=4, column=0, columnspan=2, padx=3, pady=1)
 
 window.mainloop()
 

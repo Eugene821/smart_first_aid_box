@@ -11,21 +11,25 @@
 - Raspberry pi4 (client) - 음성인식
 - Jetson Nano (client) - 영상처리
 - Arduino UNO (client) - 기기 제어
-- LCD
-- LED
-- Servo Motor * 3
+- XPT2046 Touch Screen Controller
+- Motor * 3
+- Servo Motor * 2
 - PLEOMAX 300K PIXELS Camera
 - USB SPEAKER
 - SF-555B MICROPHONE
+- Mouse
+- IR Sensor : HAM4311 * 4
 
 
 사용 언어
 python
+C++
 
 사용기술
 OpenCV
 Roboflow
 Git
-PyTorch
+YOLOv8
+
 
 
