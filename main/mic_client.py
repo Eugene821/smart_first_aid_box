@@ -1,7 +1,7 @@
 '''
 Microphone Client : 음성인식 기술 처리
 작성일 : 2024.03.30
-작성자 : 전자파(팀)
+작성자 : 전자파(대한상공회의소 팀프로젝트)
 '''
 import speech_recognition as sr
 import socket
@@ -42,11 +42,9 @@ sound_manager = SoundManager()
 # 음성 인식기 및 마이크 초기화
 recognizer = sr.Recognizer()
 
-# 핫워드 감지 후 재생할 사운드 파일명
 intro_sound_path = 'data/인트로.wav'
 retry_sound_path = 'data/다시.wav'
 
-# 사운드 파일을 여러 키워드에 매핑
 sound_to_words_mapping = {
     'data/화상.wav': ['데었', '화상', '뜨거워', '뜨겁'],
     'data/출혈.wav': ['출혈', '피', '베었', '찔렸'],
@@ -95,7 +93,7 @@ def find_sound_path(text):
 def process_speech_input():
     with sr.Microphone() as source:
         print("주변 소음 조정 중...")
-        recognizer.adjust_for_ambient_noise(source, duration=1)  # 주변 소음 조정
+        recognizer.adjust_for_ambient_noise(source, duration=1)
         print("아파!를 말하면 음성 인식이 시작됩니다.")
 
         while True:
@@ -107,10 +105,10 @@ def process_speech_input():
   
                 # 특정 키워드에 따른 명령 전송
                 if "열어" in text :
-                    s.send(b'[BT]SERVO@ON\n')  # LED 켜는 명령 전송
+                    s.send(b'[BT]SERVO@ON\n')
                     print("문이 열렸습니다.\n")
                 elif "닫아" in text:
-                    s.send(b'[BT]SERVO@OFF\n')  # LED 끄는 명령 전송
+                    s.send(b'[BT]SERVO@OFF\n')
                     print("문이 닫혔습니다.\n")
 
 
@@ -118,12 +116,11 @@ def process_speech_input():
                     sound_manager.play_sound(intro_sound_path)
                     print("추가 명령을 말하세요.\n")
 
-                    # 추가 명령에 대한 음성 입력 기다림
+                    # 추가 명령 대기
                     audio_data = recognizer.listen(source, timeout=10, phrase_time_limit=5)
                     text = recognizer.recognize_google(audio_data, language='ko-KR')
                     print(f"인식된 추가 명령: {text}")
 
-                    # 추가 명령에 따라 사운드 재생 및 명령 전송
                     sound_path = find_sound_path(text)
 
                     if sound_path:
