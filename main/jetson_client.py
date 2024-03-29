@@ -49,7 +49,7 @@ print('connect is success')
 ledFlag = False
 
 #모델 로드
-model = YOLO('best_h3.pt')
+model = YOLO('model/best_h3.pt')
 class_names = ['bites', 'burns', 'cuts']
 
 # 웹캠 설정
@@ -163,14 +163,14 @@ def send_command(command_str):
 window = tk.Tk()
 window.title("Injury Detection Application")
 
-bin = tk.PhotoImage(file="hurtlogo3.png")
+bin = tk.PhotoImage(file="data/hurtlogo3.png")
 bin_label = tk.Label(window, image=bin)
 bin_label.grid(row=0, column=2, padx=10, pady=10,  rowspan=6)
 
 panel = tk.Label(window)
 panel.grid(row=0, column=2, padx=10, pady=10,  rowspan=6)
 
-logo = tk.PhotoImage(file="hurtlogo1.png")
+logo = tk.PhotoImage(file="data/hurtlogo1.png")
 logo_label = tk.Label(window, image=logo)
 logo_label.grid(row=0, column=0, columnspan=2)
 
