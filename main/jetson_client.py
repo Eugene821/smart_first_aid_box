@@ -1,3 +1,7 @@
+'''
+Jetson Nano Client : 영상처리
+작성일 : 2024.03.30
+''' 
 import cv2
 import tkinter as tk
 import socket

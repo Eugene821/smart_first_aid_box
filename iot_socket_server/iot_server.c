@@ -151,12 +151,10 @@ int main(int argc, char *argv[])
 						write(clnt_sock, msg,strlen(msg));
 						log_file(msg);
 						shutdown(clnt_sock,SHUT_WR);
-#if 1   //for MCU
 						shutdown(client_info[i].fd,SHUT_WR); 
 						pthread_mutex_lock(&mutx);
 						client_info[i].fd = -1;
-						pthread_mutex_unlock(&mutx);
-#endif  
+						pthread_mutex_unlock(&mutx); 
 						break;
 					}
 					if(!strcmp(client_info[i].pw,pArray[1])) 
