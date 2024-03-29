@@ -42,15 +42,15 @@ sound_manager = SoundManager()
 # 음성 인식기 및 마이크 초기화
 recognizer = sr.Recognizer()
 
-intro_sound_path = 'data/인트로.wav'
-retry_sound_path = 'data/다시.wav'
+intro_sound_path = '인트로.wav'
+retry_sound_path = '다시.wav'
 
 sound_to_words_mapping = {
-    'data/화상.wav': ['데었', '화상', '뜨거워', '뜨겁'],
-    'data/출혈.wav': ['출혈', '피', '베었', '찔렸'],
-    'data/벌레.wav': ['물렸', '가렵', '모기'],
-    'data/두통.wav': ['두통', '머리', '열', '어지러워', '어지럼증'],
-    'data/감기.wav': ['감기', '기침', '콧물', '몸살', '목', '재채기', '칼칼']
+    '화상.wav': ['데었', '화상', '뜨거워', '뜨겁'],
+    '출혈.wav': ['출혈', '피', '베었', '찔렸'],
+    '벌레.wav': ['물렸', '가렵', '모기'],
+    '두통.wav': ['두통', '머리', '열', '어지러워', '어지럼증'],
+    '감기.wav': ['감기', '기침', '콧물', '몸살', '목', '재채기', '칼칼']
 }
 
 
@@ -110,6 +110,21 @@ def process_speech_input():
                 elif "닫아" in text:
                     s.send(b'[BT]SERVO@OFF\n')
                     print("문이 닫혔습니다.\n")
+                elif "하나" in text:
+                    s.send(b'[BT]MOTOR1@ON\n')
+                    print("문이 닫혔습니다.\n")
+                elif "둘" in text:
+                    s.send(b'[BT]MOTOR2@ON\n')
+                    print("문이 닫혔습니다.\n")
+                elif "셋" in text:
+                    s.send(b'[BT]MOTOR3@ON\n')
+                    print("문이 닫혔습니다.\n")
+                elif "그만" in text:
+                    s.send(b'[BT]MOTOR1@OFF\n')
+                    s.send(b'[BT]MOTOR2@OFF\n')
+                    s.send(b'[BT]MOTOR3@OFF\n')
+                    print("문이 닫혔습니다.\n")
+                    
 
 
                 if "아파" in text:
@@ -132,9 +147,10 @@ def process_speech_input():
                             s.send(b'[BT]MOTOR3@ON\n')
                             print("motor3 work\n")
                         elif any(keyword in text for keyword in ['데었', '화상', '뜨거워', '뜨겁']):
-                            s.send(b'[BT]MOTOR1@ON\n') 
-                            s.send(b'[BT]MOTOR2@ON\n') 
-                            print("motor1 work\nmotor2 work\n")
+                            s.send(b'[BT]MOTOR1@ON\n')
+                            print("motor1 work\n")
+                            s.send(b'[BT]MOTOR2@ON\n')
+                            print("motor2 work\n")
                         elif any(keyword in text for keyword in ['물렸', '가렵', '모기']):
                             s.send(b'[BT]SERVO@ON\n')
                             print("servo work\n")
