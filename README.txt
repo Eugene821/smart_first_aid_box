@@ -13,7 +13,7 @@
 - Arduino UNO (client) - 기기 제어
 - XPT2046 Touch Screen Controller
 - Motor * 3
-- Servo Motor * 2
+- Servo Motor * 1 
 - PLEOMAX 300K PIXELS Camera
 - USB SPEAKER
 - SF-555B MICROPHONE
