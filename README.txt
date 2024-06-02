@@ -30,7 +30,7 @@ C
 OpenCV
 Roboflow
 Git
-YOLOv5
+YOLOv8
 
 
 
