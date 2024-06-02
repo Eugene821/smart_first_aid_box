@@ -24,12 +24,13 @@
 사용 언어
 python
 C++
+C
 
 사용기술
 OpenCV
 Roboflow
 Git
-YOLOv8
+YOLOv5
 
 
 
