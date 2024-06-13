@@ -26,6 +26,7 @@
 4) 특정 명령을 통한 약품함 개폐 시스템 
   사용자의 특정 명령으로 약품함을 개폐할 수 있게 함으로써, 아동의 손이 닿지 않도록 주의가 필요한 약품을 안전하게 보관할 수 있다.
 
+<hr/>
 
 #### 전체 개발 환경
 ||Server (Main)|Device|Application1|Application2|
@@ -35,6 +36,8 @@
 |OS|Raspbian GNU / Ubuntu 24.04|Windows 11|JetPack 4.6.0|Raspbian GNU / Ubuntu 24.04|
 |Library|stdio.h, stdlib.h, unistd.h, string.h, arpa/inet.h, sys/types.h, sys/socket.h, netinet/in.h, pthread.h, sys/stat.h, fcntl.h, dirent.h, sys/time.h, time.h, errno.h|SoftwareSerial.h, Wire.h, Servo.h|cv2, tkinter, socket, threading, sys, time, re, yolov5|speech_recognition, socket, threading, sys, time, re, pygame|
 |System|VSCode|Arduino IDE|Google Colab, VSCode|VSCode|
+
+<hr/>
 
 #### 회로도
 
@@ -50,9 +53,14 @@
 |-|
 |![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/5c5c64f4-039d-489a-9e03-00429c783cc4)|
 
+
+<hr/>
+
 #### 전체 시스템 구성
 |![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/1a99cc5e-6179-4479-9f95-b264177b694f)|
 |-|
+
+<hr/>
 
 #### 세부 시스템 구성
 ##### 1. Raspberry Pi (Server, Master)
@@ -75,6 +83,7 @@
 |-|
 |Raspberry Pi Server와의 소켓 통신을 통해 Arduino에 데이터를 송신하면 Arduino에 수신된 값에 따라 설정된 제어시스템이 활성화된다. 만약 수신된 정보가 문 열림을 필요로 한다면 시스템은 먼저 적외선 센서로 약품의 존재 여부를 감지한다. 감지 되는 경우 서보모터가 작동하여 문을 열고 약품을 꺼낸 후 다시 넣으면 센서가 이를 감지하고 7초 뒤에 문을 자동으로 닫는다. 만약 수신된 데이터가 레일 작업을 요구한다면, 해당 작업은 레일 모터 시스템으로 전달된다. 이때, 레일 모터는 특정 조합에 따라 작동하여 물체를 이동시킨다. 만약 레일이 작동하여 물체가 아래로 떨어져 적외선센서에 물체가 인식되지 않으면 레일이 정지하게 된다.|
 
+<hr/>
 
 #### 개발 과정 및 기능
 
@@ -127,6 +136,8 @@ Training Graphs를 보면 50에서 100 사이의 Loss 값이 안정되는 것을
 
   여닫이문은 레일과는 반대로 수납공간에 위치한 IR 센서의 출력값이 1->0->1로 변하면 110° 회전(명령어를 받고 문이 열려있는 상태)해 있던 서보모터가 다시 원위치(문이 닫혀있는 상태)로 돌아오도록 구성하였다. 약품이 수납공간에 보관되어 있는 상태(1, 초기 상태) -> 문이 열린 후 약품을 밖으로 꺼내 사용(0, 수납공간 안에 물체가 없는 상태) -> 사용한 약품을 다시 수납(1)으로 이러한 상태 변화가 일어나면 문이 닫힌다. 
   여닫이문의 기본값은 IR 센서값이 1이면 서보모터가 원위치에 있고, 0인 순간에는 서보모터가 110°에 위치한 상태를 기본으로 설정했다. 문이 닫혀있는 상태에는 안의 물건을 꺼낼 수 없고, 문이 열려있는 상태에서만 물건을 빼고 다시 수납하는 것이 가능했기에 문의 상태변수 doorstate를 추가했고, 문이 열려있는 경우에 currnetIRvalue의 rising edge를 감지하면 여닫이문을 닫을 수 있도록 했다. 또한 약품을 다시 수납하고 바로 문이 닫히지 않도록(손 끼임 방지) 7초의 delay를 추가했다.
+
+<hr/>
 
 ##### ■ 작품외관
 ![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/c3378719-52ea-44a9-a537-e493a1765fa3)
