@@ -142,6 +142,8 @@ Training Graphs를 보면 50에서 100 사이의 Loss 값이 안정되는 것을
 ##### ■ 작품외관
 ![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/c3378719-52ea-44a9-a537-e493a1765fa3)
 
+##### ■ 시연영상
+![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/4b166300-641c-4dd4-ac00-89ce67963ba2)
 
   
 
