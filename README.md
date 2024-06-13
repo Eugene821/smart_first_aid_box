@@ -37,6 +37,7 @@
 |System|VSCode|Arduino IDE|Google Colab, VSCode|VSCode|
 
 #### 회로도
+
 |[Client] Jetson Nano 회로도|
 |-|
 |![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/0ae853e2-4564-4d7f-8a67-66d105ec60c4)|
@@ -71,7 +72,7 @@
 |-|
 |Raspberry Pi에 마이크와 스피커를 연결하여 핫 워드를 인식시키면 Raspberry Pi Server와의 소켓 통신을 통해 문자열 값을 Arduino에 송신한다. 송신된 결괏값을 받으면 Arduino 제어가 가능하게 했다.|
 
-##### 5. Arduino (Slave)
+##### 4. Arduino (Slave)
 |![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/ba4365b6-788f-4a65-97f5-5242497ae83d)|
 |-|
 |Raspberry Pi Server와의 소켓 통신을 통해 Arduino에 데이터를 송신하면 Arduino에 수신된 값에 따라 설정된 제어시스템이 활성화된다. 만약 수신된 정보가 문 열림을 필요로 한다면 시스템은 먼저 적외선 센서로 약품의 존재 여부를 감지한다. 감지 되는 경우 서보모터가 작동하여 문을 열고 약품을 꺼낸 후 다시 넣으면 센서가 이를 감지하고 7초 뒤에 문을 자동으로 닫는다. 만약 수신된 데이터가 레일 작업을 요구한다면, 해당 작업은 레일 모터 시스템으로 전달된다. 이때, 레일 모터는 특정 조합에 따라 작동하여 물체를 이동시킨다. 만약 레일이 작동하여 물체가 아래로 떨어져 적외선센서에 물체가 인식되지 않으면 레일이 정지하게 된다.|
