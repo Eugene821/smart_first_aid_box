@@ -50,11 +50,9 @@
 |-|
 |![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/5c5c64f4-039d-489a-9e03-00429c783cc4)|
 
-
-
 #### 전체 시스템 구성
-![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/1a99cc5e-6179-4479-9f95-b264177b694f)
-
+|![image](https://github.com/Eugene821/smart_first_aid_box/assets/68239029/1a99cc5e-6179-4479-9f95-b264177b694f)|
+|-|
 
 #### 세부 시스템 구성
 ##### 1. Raspberry Pi (Server, Master)
